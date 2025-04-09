@@ -1,0 +1,42 @@
+name: Build Hadoop 3.3.6
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y openjdk-8-jdk maven protobuf-compiler cmake zlib1g-dev \
+                            libssl-dev libsnappy-dev libbz2-dev liblz4-dev \
+                            pkg-config libkrb5-dev make gcc g++ git
+
+        # Set JAVA_HOME for Java 8
+        echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))" >> $GITHUB_ENV
+        echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
+
+    - name: Clone Hadoop source
+      run: |
+        git clone https://github.com/apache/hadoop.git
+        cd hadoop
+        git checkout rel/release-3.3.6
+
+    - name: Build Hadoop
+      run: |
+        cd hadoop
+        mvn clean package -Pdist,native -DskipTests -Dtar
+
+    - name: Upload Hadoop tarball artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: hadoop-dist
+        path: hadoop/hadoop-dist/target/hadoop-3.3.6.tar.gz
