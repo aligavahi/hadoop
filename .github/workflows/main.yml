@@ -29,7 +29,7 @@ jobs:
     - name: Build Hadoop
       run: |
         cd hadoop
-        mvn clean package -Pdist,native -DskipTests -Dtar
+        mvn clean package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true
 
     - name: Upload Hadoop tarball artifact
       uses: actions/upload-artifact@v4.6.2
