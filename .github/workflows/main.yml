@@ -38,7 +38,7 @@ jobs:
         path: hadoop/hadoop-dist/target/hadoop-3.3.6.tar.gz
 
     - name: Upload Hadoop native libraries
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4.6.2
       with:
         name: hadoop-native-libs
         path: hadoop/hadoop-dist/target/hadoop-3.3.6/lib/native
