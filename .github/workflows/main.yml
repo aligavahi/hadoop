@@ -40,3 +40,9 @@ jobs:
       with:
         name: hadoop-dist
         path: hadoop/hadoop-dist/target/hadoop-3.3.6.tar.gz
+        
+    - name: Upload Hadoop native
+      uses: actions/upload-artifact@v3
+      with:
+        name: hadoop-dist
+        path: hadoop/hadoop-dist/target/hadoop-3.3.6/lib/native
