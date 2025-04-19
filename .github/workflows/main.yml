@@ -3,7 +3,7 @@ name: Build Hadoop 3.3.6
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ trunc ]
 
 jobs:
   build:
@@ -19,7 +19,6 @@ jobs:
         sudo apt install -y openjdk-8-jdk maven protobuf-compiler cmake zlib1g-dev \
                             libssl-dev libsnappy-dev libbz2-dev liblz4-dev \
                             pkg-config libkrb5-dev make gcc g++ git
-
         # Set JAVA_HOME for Java 8
         echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))" >> $GITHUB_ENV
         echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
@@ -38,11 +37,11 @@ jobs:
     - name: Upload Hadoop tarball artifact
       uses: actions/upload-artifact@v3
       with:
-        name: hadoop-dist
+        name: hadoop-dist-tarball
         path: hadoop/hadoop-dist/target/hadoop-3.3.6.tar.gz
-        
-    - name: Upload Hadoop native
+
+    - name: Upload Hadoop native libraries
       uses: actions/upload-artifact@v3
       with:
-        name: hadoop-dist
+        name: hadoop-native-libs
         path: hadoop/hadoop-dist/target/hadoop-3.3.6/lib/native
