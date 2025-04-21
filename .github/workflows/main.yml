@@ -15,7 +15,9 @@ jobs:
         sudo apt update
         sudo apt install -y openjdk-8-jdk maven protobuf-compiler cmake zlib1g-dev \
                             libssl-dev libsnappy-dev libbz2-dev liblz4-dev \
-                            pkg-config libkrb5-dev make gcc g++ git
+                            pkg-config libkrb5-dev make gcc g++ git \
+                            build-essential autoconf libtool
+                            
         # Set JAVA_HOME for Java 8
         echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))" >> $GITHUB_ENV
         echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
@@ -29,7 +31,7 @@ jobs:
     - name: Build Hadoop
       run: |
         cd hadoop
-        mvn clean package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true
+        mvn clean package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true -e -X
 
     - name: Upload Hadoop tarball artifact
       uses: actions/upload-artifact@v4.6.2
