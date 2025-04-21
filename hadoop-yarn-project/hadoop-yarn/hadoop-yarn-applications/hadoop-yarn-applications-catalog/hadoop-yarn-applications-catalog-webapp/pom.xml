@@ -294,8 +294,8 @@
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <nodeVersion>${nodejs.version}</nodeVersion>
-                            <yarnVersion>${yarnpkg.version}</yarnVersion>
+                           <nodeVersion>v18.18.0</nodeVersion> 
+                           <yarnVersion>1.22.19</yarnVersion>
                         </configuration>
                     </execution>
                     <execution>
