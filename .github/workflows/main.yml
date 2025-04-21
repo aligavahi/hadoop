@@ -40,7 +40,7 @@ jobs:
           sudo apt-get install libsnappy-dev
           sudo apt-get install bzip2 libbz2-dev
           sudo apt-get install fuse libfuse-dev
-          sudo apt-get install libzstd1-dev
+          sudo apt-get install libzstd-dev
 
 
     - name: Clone Hadoop source
