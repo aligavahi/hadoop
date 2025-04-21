@@ -46,6 +46,10 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
+    
+    - name: Install Yarn
+      run: |
+        npm install -g yarn
         
     - name: Clone Hadoop source
       run: |
