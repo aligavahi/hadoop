@@ -47,11 +47,15 @@ jobs:
         git clone https://github.com/apache/hadoop.git
         cd hadoop
         git checkout rel/release-3.3.6
-
     - name: Build Hadoop
       run: |
         cd hadoop
-        mvn package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true -e
+        mvn package -Pnative -DskipTests -Dtar -Dmaven.javadoc.skip=true -e
+    
+    # - name: Build Hadoop
+    #   run: |
+    #     cd hadoop
+    #     mvn package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true -e
 
     - name: Upload Hadoop tarball artifact
       uses: actions/upload-artifact@v4.6.2
