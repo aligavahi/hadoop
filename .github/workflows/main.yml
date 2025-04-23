@@ -16,9 +16,60 @@ jobs:
     
     - name: Install dependencies
       run: |
-       ls /home/runner/work/hadoop/hadoop
+        sudo apt-get update
+        sudo apt-get -y install openjdk-8-jdk
+        sudo apt-get -y install maven
+        sudo apt-get -y install build-essential autoconf automake libtool cmake zlib1g-dev pkg-config libssl-dev libsasl2-dev
+        sudo apt-get -y install software-properties-common
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get -y install g++-9 gcc-9
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9
+        curl -L https://cmake.org/files/v3.19/cmake-3.19.0.tar.gz > cmake-3.19.0.tar.gz
+        tar -zxvf cmake-3.19.0.tar.gz && cd cmake-3.19.0
+        ./bootstrap
+        make -j$(nproc)
+        sudo make install
+        curl -L https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.21.12.tar.gz > protobuf-3.21.12.tar.gz
+        tar -zxvf protobuf-3.21.12.tar.gz && cd protobuf-3.21.12
+        ./autogen.sh
+        ./configure
+        make -j$(nproc)
+        sudo make install
+        curl -L https://sourceforge.net/projects/boost/files/boost/1.86.0/boost_1_86_0.tar.bz2/download > boost_1_86_0.tar.bz2
+        tar --bzip2 -xf boost_1_86_0.tar.bz2 && cd boost_1_86_0
+        ./bootstrap.sh --prefix=/usr/
+        ./b2 --without-python
+        sudo ./b2 --without-python install
+        sudo apt-get install libsnappy-dev
+        sudo apt-get install bzip2 libbz2-dev
+        sudo apt-get install fuse libfuse-dev
+        sudo apt-get install libzstd-dev
 
-    
-    - name: Install dependencies
+    - name: Clone Hadoop source
       run: |
-       pwd
+        git clone https://github.com/apache/hadoop.git
+        cd hadoop
+        git checkout rel/release-3.3.6
+
+    - name: Replace pom.xml in cloned Hadoop source with forked version
+      run: |
+        cp ../hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/pom.xml \
+           ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/pom.xml
+
+    - name: Build Hadoop
+      run: |
+        cd hadoop
+        mvn package -Pdist,native -DskipTests -Dtar -Dmaven.javadoc.skip=true -e
+
+    - name: Upload Hadoop tarball artifact
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: hadoop-dist-tarball
+        path: hadoop/hadoop-dist/target/hadoop-3.3.6.tar.gz
+
+    - name: Upload Hadoop native libraries
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: hadoop-native-libs
+        path: hadoop/hadoop-dist/target/hadoop-3.3.6/lib/native
