@@ -22,8 +22,8 @@ jobs:
 
     - name: Replace pom.xml in cloned Hadoop source with forked version
       run: |
-        cp ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/pom.xml \
-           ./hadoop/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/pom.xml
+        cp ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-applications-catalog/hadoop-yarn-applications-catalog-webapp/pom.xml \
+           ./hadoop/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-applications-catalog/hadoop-yarn-applications-catalog-webapp/pom.xml
 
     - name: Install dependencies
       run: |
