@@ -13,4 +13,7 @@ jobs:
     - name: Install dependencies
       run: |
        ls
+    
+    - name: Install dependencies
+      run: |
        pwd
