@@ -13,7 +13,18 @@ jobs:
 
     - name: Checkout code
       uses: actions/checkout@v3
-    
+
+    - name: Clone Hadoop source
+      run: |
+        git clone https://github.com/apache/hadoop.git
+        cd hadoop
+        git checkout rel/release-3.3.6
+
+    - name: Replace pom.xml in cloned Hadoop source with forked version
+      run: |
+        cp ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/pom.xml \
+           ./hadoop/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/pom.xml
+
     - name: Install dependencies
       run: |
         sudo apt-get update
@@ -45,18 +56,7 @@ jobs:
         sudo apt-get install bzip2 libbz2-dev
         sudo apt-get install fuse libfuse-dev
         sudo apt-get install libzstd-dev
-
-    - name: Clone Hadoop source
-      run: |
-        git clone https://github.com/apache/hadoop.git
-        cd hadoop
-        git checkout rel/release-3.3.6
-
-    - name: Replace pom.xml in cloned Hadoop source with forked version
-      run: |
-        cp ./hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/pom.xml \
-           ./hadoop/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/pom.xml
-
+        
     - name: Build Hadoop
       run: |
         cd hadoop
